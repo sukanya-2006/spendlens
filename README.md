@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
+# SpendLens — Free AI Spend Audit for Startups
 
-First, run the development server:
+SpendLens is a free web tool that audits your startup's AI tool spend and tells you exactly where you're overpaying — with specific, defensible recommendations to switch plans or tools.
+
+Built as part of the Credex internship assignment. Deployable and usable by any startup today.
+
+**Live URL:** https://spendlens-taupe-eight.vercel.app
+
+---
+
+## Screenshots
+
+> [Add 3 screenshots here before submission]
+> 1. Spend input form
+> 2. Results page showing savings
+> 3. Shareable audit URL
+
+---
+
+## Quick Start
+
+### Install and run locally
+
+```bash
+git clone https://github.com/sukanya-2006/spendlens.git
+cd spendlens
+npm install
+```
+
+Create a `.env.local` file:
+```
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+SUPABASE_URL=your_supabase_url
+SUPABASE_ANON_KEY=your_supabase_anon_key
+ANTHROPIC_API_KEY=your_anthropic_key
+```
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Deploy to Vercel
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Push to GitHub
+2. Import repo on vercel.com
+3. Add environment variables in Vercel dashboard
+4. Deploy
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## Decisions
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. **Rules-based audit engine instead of AI** — The assignment specifically said "for the audit math itself, hardcoded rules are correct — knowing when not to use AI is part of the test." Each rule is defensible: a finance person would agree with the reasoning.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+2. **Next.js over plain React** — App Router handles both frontend and API routes in one codebase. No separate backend needed. Vercel deployment is zero-config.
 
-## Deploy on Vercel
+3. **Supabase over Firebase** — Postgres gives us proper relational data between audits and leads. Better TypeScript SDK. Free tier is generous enough for this use case.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+4. **Email gate after value, never before** — The assignment was explicit about this. User sees full audit results first, email is optional to save/share the report.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+5. **Graceful fallback for Anthropic API** — Rather than blocking the UI when API credits are unavailable, the app falls back to a templated summary. The feature is built and documented; credits are a billing concern not a code concern.
