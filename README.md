@@ -9,13 +9,13 @@ SpendLens is a free web tool that audits your startup's AI tool spend and tells 
 ## Screenshots
 
 ### Spend Input Form
-![Spend Input Form](/screenshot-1.png)
+![Spend Input Form](public/screenshot-1.png)
 
 ### Audit Results Page
-![Audit Results](/screenshot-2.png)
+![Audit Results](public/screenshot-2.png)
 
 ### Shareable Audit URL
-![Shareable Audit](/screenshot-3.png)
+![Shareable Audit](public/screenshot-3.png)
 
 ---
 
