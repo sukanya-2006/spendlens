@@ -1,6 +1,6 @@
 # LLM Prompts
 
-## Audit Summary Prompt
+## Audit Summary — Anthropic API Prompt
 
 Used in: `app/api/generate-summary/route.ts`
 
@@ -13,7 +13,9 @@ Total monthly savings identified: ${totalMonthlySavings}
 Annual savings potential: ${totalAnnualSavings}
 Per tool breakdown:
 {toolsSummary}
-Write a concise, specific, friendly summary. Mention the biggest saving opportunity by name. Be direct and actionable. Do not use bullet points. Write in second person ("Your team..."). Exactly 100 words.
+Write a concise, specific, friendly summary. Mention the biggest saving opportunity by name.
+Be direct and actionable. Do not use bullet points. Write in second person ("Your team...").
+Exactly 100 words.
 
 
 ### Why I wrote it this way
@@ -30,9 +32,32 @@ Write a concise, specific, friendly summary. Mention the biggest saving opportun
 - Second version didn't specify word count — outputs varied wildly from 40 to 300 words
 - Third version used first person ("I recommend...") — felt robotic, second person is warmer
 
-### Model used
-- claude-sonnet-4-20250514 (with graceful fallback to templated summary if API fails)
+### Why I built a smart template fallback
 
-### Fallback behavior
-When API credits are unavailable or API fails, the system falls back to a templated summary:
-"Your team has $X/month in potential savings across N tools. Review the recommendations below to optimize your spend."
+My Anthropic API account had zero credits and I was unable to add funds during the assignment week. Rather than showing a generic "summary unavailable" message, I built a smart template engine that:
+
+- Generates **4 different summary types** based on savings tier: optimal, minor (<$100), moderate (<$500), significant (>$500)
+- **Mentions the specific tool** with the biggest saving opportunity by name
+- **References actual numbers** — team size, monthly spend, savings amount
+- **Includes use case context** in the language
+- **Triggers Credex CTA** for high-savings cases (>$500/mo)
+
+This means every user gets a genuinely different, data-driven summary — not a generic fallback. The Anthropic API integration code is fully implemented and documented. It will work immediately when credits are available.
+
+### Smart template logic
+
+```typescript
+if (totalMonthlySavings <= 0) {
+  // "Your stack is well chosen" message
+} else if (totalMonthlySavings < 100) {
+  // Minor optimization message mentioning specific tool
+} else if (totalMonthlySavings < 500) {
+  // Moderate overspend message with urgency
+} else {
+  // Significant overspend + Credex consultation CTA
+}
+```
+
+### Model used
+- Intended: claude-sonnet-4-20250514
+- Actual: Smart template engine (API credits unavailable)
