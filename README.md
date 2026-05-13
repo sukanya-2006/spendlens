@@ -1,9 +1,6 @@
-
 # SpendLens — Free AI Spend Audit for Startups
 
-SpendLens is a free web tool that audits your startup's AI tool spend and tells you exactly where you're overpaying — with specific, defensible recommendations to switch plans or tools.
-
-Built as part of the Credex internship assignment. Deployable and usable by any startup today.
+SpendLens is a free web tool that audits your startup's AI tool spend and tells you exactly where you're overpaying — with specific, defensible recommendations to switch plans or tools. Built as a lead generation asset for Credex.
 
 **Live URL:** https://spendlens-taupe-eight.vercel.app
 
@@ -11,10 +8,14 @@ Built as part of the Credex internship assignment. Deployable and usable by any 
 
 ## Screenshots
 
-> [Add 3 screenshots here before submission]
-> 1. Spend input form
-> 2. Results page showing savings
-> 3. Shareable audit URL
+### Spend Input Form
+![Spend Input Form](/screenshot-1.png)
+
+### Audit Results Page
+![Audit Results](/screenshot-2.png)
+
+### Shareable Audit URL
+![Shareable Audit](/screenshot-3.png)
 
 ---
 
@@ -43,23 +44,24 @@ npm run dev
 
 Open http://localhost:3000
 
-### Deploy to Vercel
+### Run tests
+```bash
+npm test
+```
 
-1. Push to GitHub
-2. Import repo on vercel.com
-3. Add environment variables in Vercel dashboard
-4. Deploy
+### Deploy
+Push to GitHub — Vercel auto-deploys on every push to main.
 
 ---
 
 ## Decisions
 
-1. **Rules-based audit engine instead of AI** — The assignment specifically said "for the audit math itself, hardcoded rules are correct — knowing when not to use AI is part of the test." Each rule is defensible: a finance person would agree with the reasoning.
+1. **Rules-based audit engine instead of AI for the core logic** — The assignment specifically said "for the audit math itself, hardcoded rules are correct." Each rule is defensible with real pricing data. A finance person would agree with every recommendation.
 
-2. **Next.js over plain React** — App Router handles both frontend and API routes in one codebase. No separate backend needed. Vercel deployment is zero-config.
+2. **Next.js over plain React** — App Router handles both frontend and API routes in one codebase. No separate backend needed. Vercel deployment is zero-config and auto-deploys on push.
 
-3. **Supabase over Firebase** — Postgres gives us proper relational data between audits and leads. Better TypeScript SDK. Free tier is generous enough for this use case.
+3. **Supabase over Firebase** — Postgres gives proper relational data between audits and leads. Better TypeScript SDK. Free tier is generous for this use case.
 
-4. **Email gate after value, never before** — The assignment was explicit about this. User sees full audit results first, email is optional to save/share the report.
+4. **Email gate after value, never before** — The assignment was explicit. User sees full audit results first. Email is optional to save the report.
 
-5. **Graceful fallback for Anthropic API** — Rather than blocking the UI when API credits are unavailable, the app falls back to a templated summary. The feature is built and documented; credits are a billing concern not a code concern.
+5. **Personalized summary without paid API** — Built a smart template engine that generates different summaries based on savings tier, team size, use case, and biggest saving opportunity. Reads as personalized without requiring API credits.
